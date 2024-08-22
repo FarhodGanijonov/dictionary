@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'ckeditor',
     'ckeditor_uploader',
+
 ]
 
 MIDDLEWARE = [
@@ -142,5 +144,32 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
 
+    },
+}
+
+
+JAZZMIN_SETTINGS = {
+    "site_title": "My Site Admin",
+    "site_header": "My Site Administration",
+    "site_brand": "My Site",
+    "welcome_sign": "Welcome to My Site Admin",
+    "copyright": "My Site",
+    "search_model": ["auth.User"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "show_ui_builder": True,
+    "custom_links": {
+        "auth": [
+            {
+                "name": "Users",
+                "url": "admin:auth_user_changelist",
+                "permissions": ["auth.view_user"],
+            },
+            {
+                "name": "Groups",
+                "url": "admin:auth_group_changelist",
+                "permissions": ["auth.view_group"],
+            },
+        ],
     },
 }
