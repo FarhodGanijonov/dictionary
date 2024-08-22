@@ -1,7 +1,6 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 
-
 class ScientificTeam(models.Model):
     fullname = models.CharField(max_length=100)
     position = models.CharField(max_length=200, blank=True, null=True)
@@ -54,7 +53,7 @@ class Dictionary(models.Model):
         return self.lexical
 
 class Sentences(models.Model):
-    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE)
+    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, related_name='senten')
     sentence = RichTextField(blank=True, null=True)
 
     def __str__(self):
