@@ -38,4 +38,4 @@ class DictionaryAdmin(admin.ModelAdmin):
     inlines = [SentencesInline]
 
 admin.site.register(Provensiya, ProvensiyaAdmin)
-admin.site.register(Dictionary, DictionaryAdmin)
+admin.site.register(Dictionary, DictionaryAdmin
