@@ -5,6 +5,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 from django.conf import settings
+from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -16,6 +17,8 @@ schema_view = get_schema_view(
         license=openapi.License(name="BSD License"),
     ),
     public=True,
+    permission_classes=(permissions.AllowAny,),
+
 )
 
 urlpatterns = [
