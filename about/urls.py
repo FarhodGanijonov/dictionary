@@ -1,4 +1,6 @@
 from django.urls import path
+
+
 from .views import scientific_team_list, scientists_list, expressions_list, news_list, dictionary_list, provensiya_list, \
     news_detail
 
@@ -11,3 +13,5 @@ urlpatterns = [
     path('provensiya/', provensiya_list),
     path('dictionary/', dictionary_list,),
 ]
+
+
