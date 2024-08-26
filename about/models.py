@@ -1,12 +1,15 @@
 from django.db import models
 from ckeditor.fields import RichTextField
 
+
 class ScientificTeam(models.Model):
     fullname = models.CharField(max_length=100)
+    workplace = models.CharField(max_length=200, blank=True, null=True)
     position = models.CharField(max_length=200, blank=True, null=True)
     academic_level = models.CharField(max_length=200, blank=True, null=True)
     phone = models.CharField(max_length=17, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
+    image = models.ImageField(upload_to='images/', blank=True, null=True)
     admission_day = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
