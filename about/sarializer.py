@@ -70,3 +70,19 @@ class DictionarySerializer(serializers.ModelSerializer):
         model = Dictionary
         fields = ['id', 'grammatical', 'lexical', 'comment', 'provensiya', 'senten']
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+
+        representation['grammatical'] = self.clean_html(representation['grammatical'])
+        representation['comment'] = self.clean_html(representation['comment'])
+
+        return representation
+
+    def clean_html(self, value):
+        cleaned_value = unescape(value)
+
+        cleaned_value = strip_tags(cleaned_value)
+
+        cleaned_value = re.sub(r'\s+', ' ', cleaned_value).strip()
+
+        return cleaned_value
