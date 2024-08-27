@@ -9,7 +9,7 @@ from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, D
 class ScientificTeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = ScientificTeam
-        fields = ['fullname', 'workplace', 'position', 'academic_level', 'phone', 'email', 'image', 'admission_day']
+        fields = ['id', 'fullname', 'workplace', 'position', 'academic_level', 'phone', 'email', 'image', 'admission_day']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
