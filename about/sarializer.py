@@ -97,4 +97,4 @@ class DictionarySerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ['phone', 'email', 'instagram', 'telegram', 'facebook', 'latitude', 'longitude']
+        fields = ['id', 'phone', 'email', 'instagram', 'telegram', 'facebook', 'latitude', 'longitude']
