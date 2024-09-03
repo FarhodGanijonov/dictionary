@@ -3,7 +3,7 @@ from html import unescape
 
 from django.utils.html import strip_tags
 from rest_framework import serializers
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact, Slider
 
 
 class ScientificTeamSerializer(serializers.ModelSerializer):
@@ -98,3 +98,9 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = ['id', 'phone', 'email', 'instagram', 'telegram', 'facebook', 'latitude', 'longitude']
+
+
+class SliderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Slider
+        fields = ['id', 'title', 'image']

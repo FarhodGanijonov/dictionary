@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.contrib import admin
 
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact, Slider
 from ckeditor.widgets import CKEditorWidget
 
 admin.site.register(ScientificTeam)
@@ -26,8 +26,10 @@ class SentencesInline(admin.TabularInline):
     model = Sentences
     extra = 1
 
+
 class ProvensiyaAdmin(admin.ModelAdmin):
     list_display = ('id', 'provensiya')
+
 
 class DictionaryAdmin(admin.ModelAdmin):
     formfield_overrides = {
@@ -43,6 +45,14 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('phone', 'email', 'instagram', 'telegram', 'facebook')
     list_filter = ('latitude', 'longitude')
     ordering = ('phone',)
+
+
+@admin.register(Slider)
+class SliderAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image')  # Adjust fields as needed
+    search_fields = ('title',)  # Allows searching by title
+    list_filter = ('title',)  # Allows filtering by title
+
 
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)

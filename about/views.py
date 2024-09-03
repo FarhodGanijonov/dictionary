@@ -1,9 +1,9 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, ExpressionsSerializer, NewsSerializer, \
-    ProvensiyaSerializer, DictionarySerializer, ContactSerializer
+    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer
 
 
 @api_view(['GET'])
@@ -105,3 +105,13 @@ def contact_detail(request, pk):
     elif request.method == 'DELETE':
         contact.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def slider_list(request):
+    if request.method == 'GET':
+        sliders = Slider.objects.all()
+        serializer = SliderSerializer(sliders, many=True)
+        for slider in serializer.data:
+            slider['image'] = request.build_absolute_uri(slider['image'])
+        return Response(serializer.data)
