@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.contrib import admin
 
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact
 from ckeditor.widgets import CKEditorWidget
 
 admin.site.register(ScientificTeam)
@@ -37,5 +37,13 @@ class DictionaryAdmin(admin.ModelAdmin):
     search_fields = ('lexical', 'provensiya__provensiya')
     inlines = [SentencesInline]
 
+
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('phone', 'email', 'instagram', 'telegram', 'facebook', 'latitude', 'longitude')
+    search_fields = ('phone', 'email', 'instagram', 'telegram', 'facebook')
+    list_filter = ('latitude', 'longitude')
+    ordering = ('phone',)
+
+admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)
 admin.site.register(Dictionary, DictionaryAdmin)

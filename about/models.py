@@ -62,4 +62,16 @@ class Sentences(models.Model):
     def __str__(self):
         return self.sentence[:30]
 
+class Contact(models.Model):
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+    instagram = models.URLField(max_length=200, blank=True, null=True)
+    telegram = models.URLField(max_length=200, blank=True, null=True)
+    facebook = models.URLField(max_length=200, blank=True, null=True)
+    latitude = models.CharField(max_length=20, blank=True, null=True)
+    longitude = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return self.phone
+
 
