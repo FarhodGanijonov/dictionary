@@ -1,9 +1,9 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, Text
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, ExpressionsSerializer, NewsSerializer, \
-    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer
+    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer
 
 
 @api_view(['GET'])
@@ -115,3 +115,10 @@ def slider_list(request):
         for slider in serializer.data:
             slider['image'] = request.build_absolute_uri(slider['image'])
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def text_list(request):
+    text = Text.objects.all()
+    serializer = TextSerializer(text, many=True)
+    return Response(serializer.data)

@@ -81,3 +81,7 @@ class Slider(models.Model):
 
     def __str__(self):
         return self.title
+
+class Text(models.Model):
+    provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
+    text = models.TextField(blank=True, null=True)
