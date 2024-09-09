@@ -55,13 +55,6 @@ class Dictionary(models.Model):
     def __str__(self):
         return self.lexical
 
-class Sentences(models.Model):
-    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, related_name='senten')
-    sentence = RichTextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.sentence[:30]
-
 class Contact(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField()

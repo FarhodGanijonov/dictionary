@@ -3,7 +3,7 @@ from html import unescape
 
 from django.utils.html import strip_tags
 from rest_framework import serializers
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary,  Contact, Slider, \
     Text
 
 
@@ -45,24 +45,6 @@ class NewsSerializer(serializers.ModelSerializer):
             return request.build_absolute_uri(obj.image.url)
         return None
 
-class SentencesSerializer(serializers.ModelSerializer):
-    sentence = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Sentences
-        fields = ['id', 'sentence']
-
-    def get_sentence(self, obj):
-        # 1. HTML kodlangan maxsus belgilarni dekodlash
-        cleaned_sentence = unescape(obj.sentence)
-
-        # 2. HTML teglarini olib tashlash
-        cleaned_sentence = strip_tags(cleaned_sentence)
-
-        # 3. Yangi qatorlar va ortiqcha bo'sh joylarni tozalash
-        cleaned_sentence = re.sub(r'\s+', ' ', cleaned_sentence).strip()
-
-        return cleaned_sentence
 
 class ProvensiyaSerializer(serializers.ModelSerializer):
     class Meta:
@@ -72,11 +54,10 @@ class ProvensiyaSerializer(serializers.ModelSerializer):
 
 class DictionarySerializer(serializers.ModelSerializer):
     provensiya = ProvensiyaSerializer()
-    senten = SentencesSerializer(many=True, read_only=True)
 
     class Meta:
         model = Dictionary
-        fields = ['id', 'grammatical', 'lexical', 'comment', 'provensiya', 'senten']
+        fields = ['id', 'grammatical', 'lexical', 'comment', 'provensiya']
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)

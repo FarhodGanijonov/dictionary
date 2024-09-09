@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.contrib import admin
 
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, \
     Text
 from ckeditor.widgets import CKEditorWidget
 
@@ -23,9 +23,6 @@ class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
 
 
-class SentencesInline(admin.TabularInline):
-    model = Sentences
-    extra = 1
 
 class TextAdmin(admin.ModelAdmin):
     list_display = ('id', 'provensiya', 'text')  # Fields to display in the list view
@@ -42,7 +39,6 @@ class DictionaryAdmin(admin.ModelAdmin):
     }
     list_display = ('id', 'lexical', 'provensiya')
     search_fields = ('lexical', 'provensiya__provensiya')
-    inlines = [SentencesInline]
 
 
 class ContactAdmin(admin.ModelAdmin):
