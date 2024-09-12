@@ -64,6 +64,7 @@ def provensiya_list(request):
     serializer = ProvensiyaSerializer(provensiyas, many=True)
     return Response(serializer.data)
 
+
 @api_view(['GET'])
 def dictionary_list(request):
     dictionaries = Dictionary.objects.all()
@@ -130,6 +131,12 @@ def text_list(request):
 def useful_sites_list(request):
     sites = UsefulSites.objects.all()
     serializer = UsefulSitesSerializer(sites, many=True)
+    serializer_data = serializer.data
+
+    for obj in serializer_data:
+        if obj.get('image'):
+            obj['image'] = request.build_absolute_uri(obj['image'])
+
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -141,4 +148,10 @@ def useful_sites_detail(request, pk):
         return Response({'error': 'Useful Site not found'}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = UsefulSitesSerializer(site)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    serializer_data = serializer.data
+
+    if serializer_data.get('image'):
+        serializer_data['image'] = request.build_absolute_uri(serializer_data['image'])
+
+    return Response(serializer_data, status=status.HTTP_200_OK)
+
