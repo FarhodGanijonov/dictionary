@@ -1,9 +1,11 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, Text
+from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, Text, \
+    UsefulSites
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, ExpressionsSerializer, NewsSerializer, \
-    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer
+    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
+    UsefulSitesSerializer
 
 
 @api_view(['GET'])
@@ -122,3 +124,21 @@ def text_list(request):
     text = Text.objects.all()
     serializer = TextSerializer(text, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def useful_sites_list(request):
+    sites = UsefulSites.objects.all()
+    serializer = UsefulSitesSerializer(sites, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def useful_sites_detail(request, pk):
+    try:
+        site = UsefulSites.objects.get(pk=pk)
+    except UsefulSites.DoesNotExist:
+        return Response({'error': 'Useful Site not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = UsefulSitesSerializer(site)
+    return Response(serializer.data, status=status.HTTP_200_OK)

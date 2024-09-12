@@ -78,3 +78,18 @@ class Slider(models.Model):
 class Text(models.Model):
     provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
     text = models.TextField(blank=True, null=True)
+
+
+class UsefulSites(models.Model):
+    title = models.CharField(max_length=200, blank=True, null=True)
+    image = models.ImageField(upload_to='image/', blank=True, null=True)
+    link = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = "Useful Site"
+        verbose_name_plural = "Useful Sites"
+        ordering = ['title']
+

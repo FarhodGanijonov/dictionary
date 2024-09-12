@@ -2,10 +2,35 @@ from ckeditor.fields import RichTextField
 from django.contrib import admin
 
 from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, \
-    Text
+    Text, UsefulSites
 from ckeditor.widgets import CKEditorWidget
 
-admin.site.register(ScientificTeam)
+@admin.register(ScientificTeam)
+class ScientificTeamAdmin(admin.ModelAdmin):
+    list_display = (
+        'fullname', 'workplace', 'position', 'academic_level',
+        'phone', 'email', 'admission_day', 'image_preview'
+    )
+    search_fields = (
+        'fullname', 'workplace', 'position', 'academic_level',
+        'phone', 'email'
+    )
+    list_filter = ('workplace', 'position', 'academic_level')
+    readonly_fields = ('admission_day',)  # Optional: make 'admission_day' read-only if desired
+    ordering = ['fullname']
+
+    def image_preview(self, obj):
+        if obj.image:
+            return f'<img src="{obj.image.url}" style="width: 100px; height: auto;" />'
+        return 'No Image'
+    image_preview.allow_tags = True
+    image_preview.short_description = 'Image Preview'
+
+@admin.register(UsefulSites)
+class UsefulSitesAdmin(admin.ModelAdmin):
+    list_display = ('title', 'image', 'link')
+    search_fields = ('title',)
+    list_filter = ('title',)
 
 
 @admin.register(Scientists)
