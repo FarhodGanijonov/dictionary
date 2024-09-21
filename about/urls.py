@@ -3,7 +3,8 @@ from django.urls import path
 
 from .views import scientific_team_list, scientific_team_detail, scientists_list, expressions_list, news_list, \
     dictionary_list, provensiya_list, \
-    news_detail, contact_list_create, contact_detail, slider_list, text_list, useful_sites_list, useful_sites_detail
+    news_detail, contact_list_create, contact_detail, slider_list, text_list, useful_sites_list, useful_sites_detail, \
+    WordRootAPIView
 
 urlpatterns = [
     path('scientific-team/', scientific_team_list),
@@ -20,6 +21,7 @@ urlpatterns = [
     path('text/', text_list),
     path('useful-sites/', useful_sites_list),
     path('useful-sites/<int:pk>/', useful_sites_detail),
+    path('api/word-root/', WordRootAPIView.as_view(), name='word-root-api'),
 
 ]
 

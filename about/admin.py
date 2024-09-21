@@ -2,7 +2,7 @@ from ckeditor.fields import RichTextField
 from django.contrib import admin
 
 from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, \
-    Text, UsefulSites
+    Text, UsefulSites, Category, Addition
 from ckeditor.widgets import CKEditorWidget
 
 @admin.register(ScientificTeam)
@@ -85,3 +85,5 @@ admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)
 admin.site.register(Dictionary, DictionaryAdmin)
+admin.site.register(Category)
+admin.site.register(Addition)

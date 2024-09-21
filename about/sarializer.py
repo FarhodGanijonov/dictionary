@@ -100,3 +100,13 @@ class UsefulSitesSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsefulSites
         fields = ['id', 'title', 'image', 'link']
+
+
+class WordInputSerializer(serializers.Serializer):
+    word = serializers.CharField(max_length=200)
+
+
+class WordResultSerializer(serializers.Serializer):
+    soz_ildizi = serializers.CharField(max_length=200)
+    qoshimcha = serializers.CharField(max_length=200, required=False, allow_blank=True)  # Qo'shimcha maydon
+    soz_turkumi = serializers.CharField(max_length=200, required=False, allow_blank=True)

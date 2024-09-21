@@ -93,3 +93,17 @@ class UsefulSites(models.Model):
         verbose_name_plural = "Useful Sites"
         ordering = ['title']
 
+class Category(models.Model):
+    type = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.type
+
+
+class Addition(models.Model):
+    adition = models.CharField(max_length=200)
+    categ = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='additions')
+
+    def __str__(self):
+        return self.adition
+
