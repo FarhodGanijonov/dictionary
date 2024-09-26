@@ -1,36 +1,10 @@
 from ckeditor.fields import RichTextField
 from django.contrib import admin
-
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, \
-    Text, UsefulSites, Category, Addition
+from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
+    Text, Category, Addition
 from ckeditor.widgets import CKEditorWidget
 
-@admin.register(ScientificTeam)
-class ScientificTeamAdmin(admin.ModelAdmin):
-    list_display = (
-        'fullname', 'workplace', 'position', 'academic_level',
-        'phone', 'email', 'admission_day', 'image_preview'
-    )
-    search_fields = (
-        'fullname', 'workplace', 'position', 'academic_level',
-        'phone', 'email'
-    )
-    list_filter = ('workplace', 'position', 'academic_level')
-    readonly_fields = ('admission_day',)  # Optional: make 'admission_day' read-only if desired
-    ordering = ['fullname']
-
-    def image_preview(self, obj):
-        if obj.image:
-            return f'<img src="{obj.image.url}" style="width: 100px; height: auto;" />'
-        return 'No Image'
-    image_preview.allow_tags = True
-    image_preview.short_description = 'Image Preview'
-
-@admin.register(UsefulSites)
-class UsefulSitesAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image', 'link')
-    search_fields = ('title',)
-    list_filter = ('title',)
+admin.site.register(ScientificTeam)
 
 
 @admin.register(Scientists)
@@ -38,20 +12,19 @@ class ScientistsAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'description')
 
 
-@admin.register(Expressions)
-class ExpressionsAdmin(admin.ModelAdmin):
-    list_display = ('express',)
-
-
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'description')
 
 
+class SentencesInline(admin.TabularInline):
+    model = Sentences
+    extra = 1
+
 
 class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'provensiya', 'text')  # Fields to display in the list view
-    search_fields = ('text',)  # Fields to be searchable in the admin interface
+    list_display = ('id', 'provensiya', 'text')  # Ko'rinishda maydonlarni chiqarish
+    search_fields = ['text']  # Admin interfeysda qidiriladigan maydonlar
     list_filter = ('provensiya',)
 
 class ProvensiyaAdmin(admin.ModelAdmin):
@@ -64,11 +37,12 @@ class DictionaryAdmin(admin.ModelAdmin):
     }
     list_display = ('id', 'lexical', 'provensiya')
     search_fields = ('lexical', 'provensiya__provensiya')
+    inlines = [SentencesInline]
 
 
 class ContactAdmin(admin.ModelAdmin):
-    list_display = ('phone', 'email', 'instagram', 'telegram', 'facebook', 'latitude', 'longitude')
-    search_fields = ('phone', 'email', 'instagram', 'telegram', 'facebook')
+    list_display = ('name', 'phone', 'comment', 'latitude', 'longitude')
+    search_fields = ('name', 'phone',)
     list_filter = ('latitude', 'longitude')
     ordering = ('phone',)
 
@@ -87,3 +61,5 @@ admin.site.register(Provensiya, ProvensiyaAdmin)
 admin.site.register(Dictionary, DictionaryAdmin)
 admin.site.register(Category)
 admin.site.register(Addition)
+
+

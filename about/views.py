@@ -1,14 +1,14 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from .models import ScientificTeam, Scientists, Expressions, News, Provensiya, Dictionary, Contact, Slider, Text, \
-    UsefulSites
-from .sarializer import ScientificTeamSerializer, ScientistsSerializer, ExpressionsSerializer, NewsSerializer, \
-    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    UsefulSitesSerializer, WordInputSerializer
 from .utils import find_root_and_category
+
+from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, Slider, Text
+from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
+    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
+    WordInputSerializer
 
 
 @api_view(['GET'])
@@ -33,13 +33,6 @@ def scientific_team_detail(request, pk):
 def scientists_list(request):
     scientists = Scientists.objects.all()
     serializer = ScientistsSerializer(scientists, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def expressions_list(request):
-    expressions = Expressions.objects.all()
-    serializer = ExpressionsSerializer(expressions, many=True)
     return Response(serializer.data)
 
 
@@ -123,41 +116,9 @@ def slider_list(request):
         return Response(serializer.data)
 
 
-@api_view(['GET'])
-def text_list(request):
-    text = Text.objects.all()
-    serializer = TextSerializer(text, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
-def useful_sites_list(request):
-    sites = UsefulSites.objects.all()
-    serializer = UsefulSitesSerializer(sites, many=True)
-    serializer_data = serializer.data
-
-    for obj in serializer_data:
-        if obj.get('image'):
-            obj['image'] = request.build_absolute_uri(obj['image'])
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def useful_sites_detail(request, pk):
-    try:
-        site = UsefulSites.objects.get(pk=pk)
-    except UsefulSites.DoesNotExist:
-        return Response({'error': 'Useful Site not found'}, status=status.HTTP_404_NOT_FOUND)
-
-    serializer = UsefulSitesSerializer(site)
-    serializer_data = serializer.data
-
-    if serializer_data.get('image'):
-        serializer_data['image'] = request.build_absolute_uri(serializer_data['image'])
-
-    return Response(serializer_data, status=status.HTTP_200_OK)
-
+class TextListView(ListAPIView):
+    queryset = Text.objects.all()
+    serializer_class = TextSerializer
 
 
 class WordRootAPIView(APIView):
@@ -167,13 +128,14 @@ class WordRootAPIView(APIView):
             word = serializer.validated_data['word']
             root_word, suffix, category = find_root_and_category(word)
 
-            if root_word:
-                result_data = {
-                    'soz_ildizi': root_word,
-                    'qo\'shimcha': suffix if suffix else 'Qo\'shimcha yo\'q',
-                    'soz_turkumi': category.type if category else 'So\'z turkumi topilmadi'
-                }
-                return Response(result_data, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'So‘zning ildizi topilmadi'}, status=status.HTTP_404_NOT_FOUND)
+            result_data = {
+                'soz_ildizi': root_word,
+                'soz_turkumi': category if isinstance(category, str) else category.type if category else root_word
+            }
+
+            if suffix:  # Agar qo'shimcha mavjud bo'lsa, natijaga qo'shimchani qo'shamiz
+                result_data['qo\'shimcha'] = suffix
+
+            return Response(result_data, status=status.HTTP_200_OK)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

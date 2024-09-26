@@ -24,13 +24,6 @@ class Scientists(models.Model):
         return self.fullname
 
 
-class Expressions(models.Model):
-    express = models.TextField()
-
-    def __str__(self):
-        return self.express
-
-
 class News(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
@@ -38,6 +31,7 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Provensiya(models.Model):
     provensiya = models.CharField(max_length=200)
@@ -55,12 +49,19 @@ class Dictionary(models.Model):
     def __str__(self):
         return self.lexical
 
+
+class Sentences(models.Model):
+    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, related_name='senten')
+    sentence = RichTextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.sentence[:30]
+
+
 class Contact(models.Model):
+    name = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
-    email = models.EmailField()
-    instagram = models.URLField(max_length=200, blank=True, null=True)
-    telegram = models.URLField(max_length=200, blank=True, null=True)
-    facebook = models.URLField(max_length=200, blank=True, null=True)
+    comment = models.TextField(max_length=200)
     latitude = models.CharField(max_length=20, blank=True, null=True)
     longitude = models.CharField(max_length=20, blank=True, null=True)
 
@@ -75,23 +76,11 @@ class Slider(models.Model):
     def __str__(self):
         return self.title
 
+
 class Text(models.Model):
-    provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
+    provensiya = models.ForeignKey('Provensiya', on_delete=models.CASCADE)
     text = models.TextField(blank=True, null=True)
 
-
-class UsefulSites(models.Model):
-    title = models.CharField(max_length=200, blank=True, null=True)
-    image = models.ImageField(upload_to='image/', blank=True, null=True)
-    link = models.URLField(blank=True, null=True)
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = "Useful Site"
-        verbose_name_plural = "Useful Sites"
-        ordering = ['title']
 
 class Category(models.Model):
     type = models.CharField(max_length=200)
@@ -106,4 +95,3 @@ class Addition(models.Model):
 
     def __str__(self):
         return self.adition
-
