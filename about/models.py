@@ -95,3 +95,12 @@ class Addition(models.Model):
 
     def __str__(self):
         return self.adition
+
+
+class UsefulSites(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='images/')
+    link = models.URLField()
+
+    def __str__(self):
+        return self.title

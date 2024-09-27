@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.contrib import admin
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, Category, Addition
+    Text, Category, Addition, UsefulSites
 from ckeditor.widgets import CKEditorWidget
 
 admin.site.register(ScientificTeam)
@@ -27,6 +27,7 @@ class TextAdmin(admin.ModelAdmin):
     search_fields = ['text']  # Admin interfeysda qidiriladigan maydonlar
     list_filter = ('provensiya',)
 
+
 class ProvensiyaAdmin(admin.ModelAdmin):
     list_display = ('id', 'provensiya')
 
@@ -47,13 +48,19 @@ class ContactAdmin(admin.ModelAdmin):
     ordering = ('phone',)
 
 
+@admin.register(UsefulSites)
+class UsefulSitesAdmin(admin.ModelAdmin):
+    list_display = ['title', 'link']  # Admin interfeysida qaysi ustunlarni ko'rsatishni belgilaymiz
+
+
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
     list_display = ('title', 'image')  # Adjust fields as needed
     search_fields = ('title',)  # Allows searching by title
     list_filter = ('title',)  # Allows filtering by title
 
-  # Add filters on the sidebar for the list view
+
+# Add filters on the sidebar for the list view
 
 admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)
@@ -61,5 +68,3 @@ admin.site.register(Provensiya, ProvensiyaAdmin)
 admin.site.register(Dictionary, DictionaryAdmin)
 admin.site.register(Category)
 admin.site.register(Addition)
-
-

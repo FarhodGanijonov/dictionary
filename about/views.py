@@ -5,10 +5,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .utils import find_root_and_category
 
-from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, Slider, Text
+from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, Slider, Text, UsefulSites
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
     ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    WordInputSerializer
+    WordInputSerializer, UsefulSitesSerializer
 
 
 @api_view(['GET'])
@@ -114,6 +114,13 @@ def slider_list(request):
         for slider in serializer.data:
             slider['image'] = request.build_absolute_uri(slider['image'])
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def useful_sites_list(request):
+    teams = UsefulSites.objects.all()
+    serializer = UsefulSitesSerializer(teams, many=True, context={'request': request})
+    return Response(serializer.data)
 
 
 class TextListView(ListAPIView):

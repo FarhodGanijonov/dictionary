@@ -4,7 +4,7 @@ from html import unescape
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text
+    Text, UsefulSites
 
 
 class ScientificTeamSerializer(serializers.ModelSerializer):
@@ -121,3 +121,9 @@ class WordResultSerializer(serializers.Serializer):
     soz_ildizi = serializers.CharField(max_length=200)
     qoshimcha = serializers.CharField(max_length=200, required=False, allow_blank=True)  # Qo'shimcha maydon
     soz_turkumi = serializers.CharField(max_length=200, required=False, allow_blank=True)
+
+
+class UsefulSitesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UsefulSites
+        fields = ['id', 'title', 'image', 'link']
