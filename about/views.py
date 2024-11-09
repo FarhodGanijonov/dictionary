@@ -3,12 +3,15 @@ from rest_framework.decorators import api_view
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from .pagination import NewsPagination
 from .utils import find_root_and_category
 
-from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, Slider, Text, UsefulSites
+from .models import (ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact,\
+                     Slider, Text, UsefulSites, NewsCategory)
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
     ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    WordInputSerializer, UsefulSitesSerializer
+    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer
 
 
 @api_view(['GET'])
@@ -37,8 +40,22 @@ def scientists_list(request):
 
 
 @api_view(['GET'])
+def newscategory_list(request):
+    categories = NewsCategory.objects.all()
+    serializer = NewsCategorySerializer(categories, many=True)
+    return Response(serializer.data)
+
+
+@api_view(['GET'])
 def news_list(request):
     news = News.objects.all()
+    paginator = NewsPagination()
+    page = paginator.paginate_queryset(news, request)
+
+    if page is not None:
+        serializer = NewsSerializer(page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)
+
     serializer = NewsSerializer(news, many=True, context={'request': request})
     return Response(serializer.data)
 

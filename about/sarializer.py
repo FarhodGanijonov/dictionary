@@ -4,7 +4,7 @@ from html import unescape
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, UsefulSites
+    Text, UsefulSites, NewsCategory
 
 
 class ScientificTeamSerializer(serializers.ModelSerializer):
@@ -27,12 +27,19 @@ class ScientistsSerializer(serializers.ModelSerializer):
         fields = ['fullname', 'description']
 
 
+class NewsCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsCategory
+        fields = ['id', 'name']
+
+
 class NewsSerializer(serializers.ModelSerializer):
     image = serializers.SerializerMethodField()
+    category = NewsCategorySerializer()
 
     class Meta:
         model = News
-        fields = ['id', 'title', 'description', 'image']
+        fields = ['id', 'title', 'description', 'image', 'category']
 
     def get_image(self, obj):
         request = self.context.get('request')
@@ -119,7 +126,7 @@ class WordInputSerializer(serializers.Serializer):
 
 class WordResultSerializer(serializers.Serializer):
     soz_ildizi = serializers.CharField(max_length=200)
-    qoshimcha = serializers.CharField(max_length=200, required=False, allow_blank=True)  # Qo'shimcha maydon
+    qoshimcha = serializers.CharField(max_length=200, required=False, allow_blank=True)
     soz_turkumi = serializers.CharField(max_length=200, required=False, allow_blank=True)
 
 

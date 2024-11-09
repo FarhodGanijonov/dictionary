@@ -1,8 +1,6 @@
-from ckeditor.fields import RichTextField
 from django.contrib import admin
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, Category, Addition, UsefulSites
-from ckeditor.widgets import CKEditorWidget
+    Text, Addition, UsefulSites, NewsCategory
 
 admin.site.register(ScientificTeam)
 
@@ -12,9 +10,15 @@ class ScientistsAdmin(admin.ModelAdmin):
     list_display = ('fullname', 'description')
 
 
+@admin.register(NewsCategory)
+class NewsCategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name',)
+
+
 @admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description')
+    list_display = ('id', 'title', 'description', 'category')
 
 
 class SentencesInline(admin.TabularInline):
@@ -23,8 +27,8 @@ class SentencesInline(admin.TabularInline):
 
 
 class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'provensiya', 'text')  # Ko'rinishda maydonlarni chiqarish
-    search_fields = ['text']  # Admin interfeysda qidiriladigan maydonlar
+    list_display = ('id', 'provensiya', 'text')
+    search_fields = ['text']
     list_filter = ('provensiya',)
 
 
@@ -33,9 +37,6 @@ class ProvensiyaAdmin(admin.ModelAdmin):
 
 
 class DictionaryAdmin(admin.ModelAdmin):
-    formfield_overrides = {
-        RichTextField: {'widget': CKEditorWidget()},
-    }
     list_display = ('id', 'lexical', 'provensiya')
     search_fields = ('lexical', 'provensiya__provensiya')
     inlines = [SentencesInline]
@@ -50,21 +51,19 @@ class ContactAdmin(admin.ModelAdmin):
 
 @admin.register(UsefulSites)
 class UsefulSitesAdmin(admin.ModelAdmin):
-    list_display = ['title', 'link']  # Admin interfeysida qaysi ustunlarni ko'rsatishni belgilaymiz
+    list_display = ['title', 'link']
 
 
 @admin.register(Slider)
 class SliderAdmin(admin.ModelAdmin):
-    list_display = ('title', 'image')  # Adjust fields as needed
-    search_fields = ('title',)  # Allows searching by title
-    list_filter = ('title',)  # Allows filtering by title
+    list_display = ('title', 'image')
+    search_fields = ('title',)
+    list_filter = ('title',)
 
 
-# Add filters on the sidebar for the list view
-
+# admin.site.register(NewsCategory, NewsCategoryAdmin)
 admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)
 admin.site.register(Dictionary, DictionaryAdmin)
-admin.site.register(Category)
 admin.site.register(Addition)

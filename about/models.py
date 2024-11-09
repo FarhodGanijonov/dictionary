@@ -1,5 +1,4 @@
 from django.db import models
-from ckeditor.fields import RichTextField
 
 
 class ScientificTeam(models.Model):
@@ -24,10 +23,18 @@ class Scientists(models.Model):
         return self.fullname
 
 
+class NewsCategory(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
 class News(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     image = models.FileField(blank=True, null=True)
+    category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news')
 
     def __str__(self):
         return self.title
@@ -42,9 +49,9 @@ class Provensiya(models.Model):
 
 class Dictionary(models.Model):
     provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
-    grammatical = RichTextField(blank=True, null=True)
+    grammatical = models.TextField(blank=True, null=True)
     lexical = models.CharField(max_length=200)
-    comment = RichTextField(blank=True, null=True)
+    comment = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.lexical
@@ -52,7 +59,7 @@ class Dictionary(models.Model):
 
 class Sentences(models.Model):
     dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, related_name='senten')
-    sentence = RichTextField(blank=True, null=True)
+    sentence = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.sentence[:30]
