@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, Addition, UsefulSites, NewsCategory
+    Text, Addition, UsefulSites, NewsCategory, AdminContact
 
 admin.site.register(ScientificTeam)
 
@@ -40,6 +40,10 @@ class DictionaryAdmin(admin.ModelAdmin):
     list_display = ('id', 'lexical', 'provensiya')
     search_fields = ('lexical', 'provensiya__provensiya')
     inlines = [SentencesInline]
+
+@admin.register(AdminContact)
+class AdminContactAdmin(admin.ModelAdmin):
+    list_display = ('id', 'phone', 'email', 'location')
 
 
 class ContactAdmin(admin.ModelAdmin):

@@ -7,11 +7,11 @@ from rest_framework.views import APIView
 from .pagination import NewsPagination
 from .utils import find_root_and_category
 
-from .models import (ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact,\
-                     Slider, Text, UsefulSites, NewsCategory)
+from .models import (ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, \
+                     Slider, Text, UsefulSites, NewsCategory, AdminContact)
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
     ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer
+    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer, AdminContactSerializer
 
 
 @api_view(['GET'])
@@ -83,6 +83,14 @@ def dictionary_list(request):
     dictionaries = Dictionary.objects.all()
     serializer = DictionarySerializer(dictionaries, many=True)
     return Response(serializer.data)
+
+
+@api_view(['GET'])
+def admin_contact_list(request):
+    if request.method == 'GET':
+        contacts = AdminContact.objects.all()
+        serializer = AdminContactSerializer(contacts, many=True)
+        return Response(serializer.data)
 
 
 @api_view(['GET', 'POST'])

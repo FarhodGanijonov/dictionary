@@ -1,4 +1,5 @@
 from django.db import models
+from rest_framework.exceptions import ValidationError
 
 
 class ScientificTeam(models.Model):
@@ -65,6 +66,20 @@ class Sentences(models.Model):
         return self.sentence[:30]
 
 
+class AdminContact(models.Model):
+    phone = models.CharField(max_length=20)
+    email = models.CharField(max_length=100)
+    location = models.TextField()
+
+    def save(self, *args, **kwargs):
+        if AdminContact.objects.exists() and not self.pk:
+            raise ValidationError("Faqat bitta AdminContact obyektiga ruxsat berilgan.")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.phone
+
+
 class Contact(models.Model):
     name = models.CharField(max_length=200)
     phone = models.CharField(max_length=20)
@@ -111,3 +126,4 @@ class UsefulSites(models.Model):
 
     def __str__(self):
         return self.title
+
