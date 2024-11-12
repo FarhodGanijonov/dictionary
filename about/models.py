@@ -73,9 +73,9 @@ class AdminContact(models.Model):
     phone = models.CharField(max_length=20)
     email = models.CharField(max_length=100)
     location = models.TextField(blank=True, null=True)
-    telegram = models.URLField(default='', blank=True, null=True)
-    instagram = models.URLField(default='', blank=True, null=True)
-    youtube = models.URLField(default='', blank=True, null=True)
+    telegram = models.URLField(blank=True, null=True)
+    instagram = models.URLField(blank=True, null=True)
+    youtube = models.URLField(blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if AdminContact.objects.exists() and not self.pk:
