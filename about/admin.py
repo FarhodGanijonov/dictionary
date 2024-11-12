@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, Addition, UsefulSites, NewsCategory, AdminContact
+    Text, Addition, UsefulSites, NewsCategory, AdminContact, Category
 
 admin.site.register(ScientificTeam)
 
@@ -65,7 +65,11 @@ class SliderAdmin(admin.ModelAdmin):
     list_filter = ('title',)
 
 
-# admin.site.register(NewsCategory, NewsCategoryAdmin)
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type')
+    search_fields = ('type',)
+
 admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)

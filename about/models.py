@@ -100,7 +100,7 @@ class Slider(models.Model):
 
 
 class Text(models.Model):
-    provensiya = models.ForeignKey('Provensiya', on_delete=models.CASCADE)
+    provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
     text = models.TextField(blank=True, null=True)
 
 

@@ -8,10 +8,10 @@ from .pagination import NewsPagination
 from .utils import find_root_and_category
 
 from .models import (ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, \
-                     Slider, Text, UsefulSites, NewsCategory, AdminContact)
+                     Slider, Text, UsefulSites, NewsCategory, AdminContact, Category)
 from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
     ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer, AdminContactSerializer
+    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer, AdminContactSerializer, CategorySerializer
 
 
 @api_view(['GET'])
@@ -171,3 +171,12 @@ class WordRootAPIView(APIView):
             return Response(result_data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def category_soz_turkum(request):
+    if request.method == 'GET':
+        categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
+

@@ -4,7 +4,7 @@ from html import unescape
 from django.utils.html import strip_tags
 from rest_framework import serializers
 from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, UsefulSites, NewsCategory, AdminContact
+    Text, UsefulSites, NewsCategory, AdminContact, Category
 
 
 class ScientificTeamSerializer(serializers.ModelSerializer):
@@ -140,3 +140,10 @@ class UsefulSitesSerializer(serializers.ModelSerializer):
     class Meta:
         model = UsefulSites
         fields = ['id', 'title', 'image', 'link']
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'type']
+
