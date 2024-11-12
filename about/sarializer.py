@@ -103,7 +103,7 @@ class DictionarySerializer(serializers.ModelSerializer):
 class AdminContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = AdminContact
-        fields = ['phone', 'email', 'location']
+        fields = ['phone', 'email', 'location', 'telegram', 'instagram', 'youtube',]
 
 
 class ContactSerializer(serializers.ModelSerializer):

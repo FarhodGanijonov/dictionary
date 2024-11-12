@@ -41,9 +41,10 @@ class DictionaryAdmin(admin.ModelAdmin):
     search_fields = ('lexical', 'provensiya__provensiya')
     inlines = [SentencesInline]
 
+
 @admin.register(AdminContact)
 class AdminContactAdmin(admin.ModelAdmin):
-    list_display = ('id', 'phone', 'email', 'location')
+    list_display = ('id', 'phone', 'email', 'location', 'telegram', 'instagram', 'youtube',)
 
 
 class ContactAdmin(admin.ModelAdmin):
@@ -66,9 +67,10 @@ class SliderAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class Category_soz_turkum(admin.ModelAdmin):
     list_display = ('id', 'type')
     search_fields = ('type',)
+
 
 admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)

@@ -70,6 +70,9 @@ class AdminContact(models.Model):
     phone = models.CharField(max_length=20)
     email = models.CharField(max_length=100)
     location = models.TextField()
+    telegram = models.URLField()
+    instagram = models.URLField()
+    youtube = models.URLField()
 
     def save(self, *args, **kwargs):
         if AdminContact.objects.exists() and not self.pk:
@@ -126,4 +129,5 @@ class UsefulSites(models.Model):
 
     def __str__(self):
         return self.title
+
 
