@@ -26,6 +26,7 @@ class Scientists(models.Model):
 
 class NewsCategory(models.Model):
     name = models.CharField(max_length=100, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -36,6 +37,8 @@ class News(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.FileField(blank=True, null=True)
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
@@ -71,7 +74,7 @@ class AdminContact(models.Model):
     email = models.CharField(max_length=100)
     location = models.TextField()
     telegram = models.URLField()
-    instagram = models.URLField()
+    instagram = models.URLField(default='')
     youtube = models.URLField()
 
     def save(self, *args, **kwargs):
