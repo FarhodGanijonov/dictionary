@@ -1,6 +1,7 @@
 from django.contrib import admin
-from .models import ScientificTeam, Scientists, News, Provensiya, Dictionary, Sentences, Contact, Slider, \
-    Text, Addition, UsefulSites, NewsCategory, AdminContact, Category
+
+from .models import ScientificTeam, Scientists, News, Provensiya, Contact, Slider, \
+    Text, Addition, UsefulSites, NewsCategory, AdminContact, Category, AuthorText, TextField
 
 admin.site.register(ScientificTeam)
 
@@ -20,27 +21,28 @@ class NewsCategoryAdmin(admin.ModelAdmin):
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'description', 'category')
 
+@admin.register(AuthorText)
+class AuthorTextAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author')
+    search_fields = ('author',)
 
-class SentencesInline(admin.TabularInline):
-    model = Sentences
+
+class TextFieldInline(admin.TabularInline):
+    model = TextField
+    fields = ['text']
     extra = 1
 
 
+@admin.register(Text)
 class TextAdmin(admin.ModelAdmin):
-    list_display = ('id', 'provensiya', 'text')
-    search_fields = ['text']
+    list_display = ('id', 'word', 'provensiya', 'author',)
+    search_fields = ['word']
     list_filter = ('provensiya',)
+    inlines = [TextFieldInline]
 
 
 class ProvensiyaAdmin(admin.ModelAdmin):
     list_display = ('id', 'provensiya')
-
-
-class DictionaryAdmin(admin.ModelAdmin):
-    list_display = ('id', 'lexical', 'provensiya')
-    search_fields = ('lexical', 'provensiya__provensiya')
-    inlines = [SentencesInline]
-
 
 @admin.register(AdminContact)
 class AdminContactAdmin(admin.ModelAdmin):
@@ -72,8 +74,6 @@ class Category_soz_turkum(admin.ModelAdmin):
     search_fields = ('type',)
 
 
-admin.site.register(Text, TextAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Provensiya, ProvensiyaAdmin)
-admin.site.register(Dictionary, DictionaryAdmin)
 admin.site.register(Addition)

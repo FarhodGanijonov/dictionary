@@ -1,17 +1,16 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
-from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .pagination import NewsPagination
-from .utils import find_root_and_category
-
-from .models import (ScientificTeam, Scientists, News, Provensiya, Dictionary, Contact, \
-                     Slider, Text, UsefulSites, NewsCategory, AdminContact, Category)
-from .sarializer import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
-    ProvensiyaSerializer, DictionarySerializer, ContactSerializer, SliderSerializer, TextSerializer, \
-    WordInputSerializer, UsefulSitesSerializer, NewsCategorySerializer, AdminContactSerializer, CategorySerializer
+from django.db.models import Q, Count
+from .models import (ScientificTeam, Scientists, News, Provensiya, Contact, \
+                     Slider, UsefulSites, NewsCategory, AdminContact, Category, AuthorText, Text, TextField, )
+from .serializers import ScientificTeamSerializer, ScientistsSerializer, NewsSerializer, \
+    ProvensiyaSerializer, ContactSerializer, SliderSerializer, TextSerializer, \
+    UsefulSitesSerializer, NewsCategorySerializer, AdminContactSerializer, CategorySerializer, \
+    AuthorTextSerializer, TextFieldSerializer
 
 
 @api_view(['GET'])
@@ -79,13 +78,6 @@ def provensiya_list(request):
 
 
 @api_view(['GET'])
-def dictionary_list(request):
-    dictionaries = Dictionary.objects.all()
-    serializer = DictionarySerializer(dictionaries, many=True)
-    return Response(serializer.data)
-
-
-@api_view(['GET'])
 def admin_contact_list(request):
     if request.method == 'GET':
         contacts = AdminContact.objects.all()
@@ -148,29 +140,19 @@ def useful_sites_list(request):
     return Response(serializer.data)
 
 
-class TextListView(ListAPIView):
-    queryset = Text.objects.all()
-    serializer_class = TextSerializer
+@api_view(['GET'])
+def author_text(request):
+    if request.method == 'GET':
+        categories = AuthorText.objects.all()
+        serializer = AuthorTextSerializer(categories, many=True)
+        return Response(serializer.data)
 
 
-class WordRootAPIView(APIView):
-    def post(self, request):
-        serializer = WordInputSerializer(data=request.data)
-        if serializer.is_valid():
-            word = serializer.validated_data['word']
-            root_word, suffix, category = find_root_and_category(word)
-
-            result_data = {
-                'soz_ildizi': root_word,
-                'soz_turkumi': category if isinstance(category, str) else category.type if category else root_word
-            }
-
-            if suffix:  # Agar qo'shimcha mavjud bo'lsa, natijaga qo'shimchani qo'shamiz
-                result_data['qo\'shimcha'] = suffix
-
-            return Response(result_data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+@api_view(['GET'])
+def text_list_view(request):
+    texts = Text.objects.all()
+    serializer = TextSerializer(texts, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])
@@ -180,3 +162,57 @@ def category_soz_turkum(request):
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
 
+
+class TextSearchAPIView(APIView):
+    def get(self, request):
+        query = request.GET.get("word", "").strip().lower()
+        search_type = request.GET.get("type", "lemma").lower()
+
+        if not query:
+            return Response({"error": "So‘z kiritilmadi!"}, status=400)
+
+        if search_type == "lemma":
+            text_obj = Text.objects.filter(word__iexact=query).first()
+            if not text_obj:
+                return Response({"error": f"So‘z '{query}' topilmadi."}, status=404)
+
+            text_fields = TextField.objects.filter(
+                Q(text_model=text_obj) &
+                Q(text__iregex=fr'\b{query}\b')
+            )
+
+            if not text_fields.exists():
+                return Response({"message": f"So‘z '{query}' ishtirok etgan gaplar topilmadi."}, status=404)
+
+            serializer = TextFieldSerializer(text_fields, many=True)
+            return Response(serializer.data)
+
+        elif search_type == "token":
+            text_fields = TextField.objects.filter(
+                Q(text__icontains=query)
+            )
+
+            if not text_fields.exists():
+                return Response({"error": f"So‘z '{query}' ishtirok etgan gaplar topilmadi."}, status=404)
+
+            serializer = TextFieldSerializer(text_fields, many=True)
+
+            return Response(serializer.data)
+
+        return Response({"message": "Noto‘g‘ri qidiruv turi."}, status=400)
+
+
+class ProvensiyaWordStatsAPIView(APIView):
+    def get(self, request):
+        provensiya_data = (
+            Text.objects.values("provensiya__provensiya")
+            .annotate(word_count=Count("word"))
+            .order_by("-word_count")
+        )
+
+        result = [
+            {"provensiya": data["provensiya__provensiya"], "word_count": data["word_count"]}
+            for data in provensiya_data
+        ]
+
+        return Response(result)

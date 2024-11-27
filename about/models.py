@@ -37,36 +37,11 @@ class News(models.Model):
     description = models.TextField(blank=True, null=True)
     image = models.FileField(blank=True, null=True)
     category = models.ForeignKey(NewsCategory, on_delete=models.CASCADE, related_name='news')
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField()
+    updated_at = models.DateTimeField()
 
     def __str__(self):
         return self.title
-
-
-class Provensiya(models.Model):
-    provensiya = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.provensiya
-
-
-class Dictionary(models.Model):
-    provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
-    grammatical = models.TextField(blank=True, null=True)
-    lexical = models.CharField(max_length=200)
-    comment = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.lexical
-
-
-class Sentences(models.Model):
-    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE, related_name='senten')
-    sentence = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.sentence[:30]
 
 
 class AdminContact(models.Model):
@@ -105,9 +80,35 @@ class Slider(models.Model):
         return self.title
 
 
+class Provensiya(models.Model):
+    provensiya = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.provensiya
+
+
+class AuthorText(models.Model):
+    author = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.author
+
+
+class TextField(models.Model):
+    text = models.TextField()
+    text_model = models.ForeignKey('Text', related_name='text_fields', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.text[:50]
+
+
 class Text(models.Model):
-    provensiya = models.ForeignKey(Provensiya, on_delete=models.CASCADE)
-    text = models.TextField(blank=True, null=True)
+    word = models.CharField(max_length=255)
+    provensiya = models.ForeignKey(Provensiya, on_delete=models.SET_NULL, null=True, blank=True)
+    author = models.ForeignKey(AuthorText, on_delete=models.SET_NULL, null=True, blank=True)
+
+    def __str__(self):
+        return self.word
 
 
 class Category(models.Model):
@@ -132,5 +133,3 @@ class UsefulSites(models.Model):
 
     def __str__(self):
         return self.title
-
-
